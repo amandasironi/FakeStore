@@ -1,0 +1,51 @@
+@model CartViewModel
+@{
+    ViewData["Title"] = "Resumo do Pedido";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="mb-4">
+    <h4>Informações do Cliente</h4>
+    <p><strong>Nome:</strong> @Model.User.FullName</p>
+    <p><strong>Endereço:</strong> @Model.User.Address</p>
+</div>
+
+<div>
+    <h4>Produtos no Carrinho</h4>
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 80px;">Imagem</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.ImageUrl" alt="@item.ProductTitle" style="width: 60px; height: auto;" />
+                    </td>
+                    <td>@item.ProductTitle</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>@item.TotalPrice.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-end"><strong>Total [R$]:</strong></td>
+                <td><strong>@Model.CartPrice.ToString("C")</strong></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-end"><strong>Total [U$]:</strong></td>
+                <td><strong>@Model.DolarCartPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,61 @@
+﻿@model NewCartViewModel
+@{
+    ViewData["Title"] = "Criar Pedido";
+}
+<body data-mode="create">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="text-center">
+        <form asp-action="Create" method="post">
+            <div>
+                <label asp-for="UserId">Selecione o usuário:</label>
+                <select asp-for="UserId" class="form-control" asp-items="@(new SelectList(Model.Users, "UserId", "FullName"))">
+                    <option value="">-- Selecione o usuário --</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div>
+                        <label for="product-select">Selecione um produto:</label>
+                        <select id="product-select" class="form-control">
+                            <option value="">-- Selecione um produto --</option>
+                            @foreach (var item in Model.Products)
+                            {
+                                <option value="@item.ProductId" data-title="@item.ProductTitle">@item.ProductTitle</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div>
+                        <label for="quantity">Quantidade:</label>
+                        <input type="number" id="quantity" class="form-control" min="1" value="1" />
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <button type="button" id="add-product" class="btn-nav">Adicionar ao pedido</button>
+            <br /><br />
+
+            <h4>Produtos Selecionados</h4>
+            <table class="table" id="cart-table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <div id="cart-items-container"></div>
+
+            <button type="submit" class="btn-nav">Criar Pedido</button>
+        </form>
+    </div>
+</body>

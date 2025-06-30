@@ -1,0 +1,77 @@
+@model UpdateCartViewModel
+@{
+    ViewData["Title"] = "Editar Pedido";
+}
+<body data-mode="update">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="text-center">
+        <form asp-action="Update" method="post">
+            <input type="hidden" name="Cart.CartId" value="@Model.Cart.CartId" />
+
+            <div>
+                <label asp-for="Cart.User.UserId">Selecione o usuário:</label>
+                <select asp-for="Cart.User.UserId" class="form-control" asp-items="@(new SelectList(Model.Users, "UserId", "FullName", Model.Cart.User.UserId))">
+                    <option value="">-- Selecione o usuário --</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div>
+                        <label for="product-select">Adicionar produto:</label>
+                        <select id="product-select" class="form-control">
+                            <option value="">-- Selecione um produto --</option>
+                            @foreach (var item in Model.Products)
+                            {
+                                <option value="@item.ProductId" data-title="@item.ProductTitle">@item.ProductTitle</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div>
+                        <label for="quantity">Quantidade:</label>
+                        <input type="number" id="quantity" class="form-control" min="1" value="1" />
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <button type="button" id="add-product" class="btn-nav">Adicionar ao pedido</button>
+            <br /><br />
+
+            <h4>Produtos Selecionados</h4>
+            <table class="table" id="cart-table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Cart.CartItems.Count; i++)
+                    {
+                        var item = Model.Cart.CartItems[i];
+                        <tr>
+                            <td>@item.ProductTitle</td>
+                            <td>
+                                <input type="number" class="form-control quantity-input" name="Cart.CartItems[@i].Quantity" value="@item.Quantity" min="1" data-index="@i" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger remove-row">Remover</button>
+                            </td>
+                        </tr>
+                        <input type="hidden" name="Cart.CartItems[@i].ProductId" value="@item.ProductId" />
+                    }
+                </tbody>
+            </table>
+
+            <div id="cart-items-container"></div>
+
+            <button type="submit" class="btn-nav">Atualizar Pedido</button>
+        </form>
+    </div>
+</body>
